@@ -1,6 +1,6 @@
 import 'package:test/test.dart';
+import 'package:validador_cpf/cpf_validate.dart';
 
-import '../lib/cpf_validate.dart';
 
 void main(){
   late CpfValidate cpfValidator;
