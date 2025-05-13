@@ -24,7 +24,7 @@ void main() {
       expect(find.widgetWithText(ElevatedButton, 'validar'), findsOneWidget);
     });
 
-    testWidgets('mostra "CPF válido" para um CPF válido', (WidgetTester tester) async {
+    testWidgets('mostra "CPF válido ✅" para um CPF válido', (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: CpfValidatorScreen(),
@@ -35,11 +35,11 @@ void main() {
       await tester.tap(find.widgetWithText(ElevatedButton, 'validar'));
       await tester.pumpAndSettle();
 
-      expect(find.text('CPF válido'), findsOneWidget);
-      expect(find.text('CPF inválido'), findsNothing);
+      expect(find.text('CPF válido ✅'), findsOneWidget);
+      expect(find.text('CPF inválido ❌'), findsNothing);
     });
 
-    testWidgets('mostra "CPF inválido" para um CPF inválido', (WidgetTester tester) async {
+    testWidgets('mostra "CPF inválido ❌" para um CPF inválido', (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
           home: CpfValidatorScreen(),
@@ -50,8 +50,8 @@ void main() {
       await tester.tap(find.widgetWithText(ElevatedButton, 'validar'));
       await tester.pumpAndSettle();
 
-      expect(find.text('CPF inválido'), findsOneWidget);
-      expect(find.text('CPF válido'), findsNothing);
+      expect(find.text('CPF inválido ❌'), findsOneWidget);
+      expect(find.text('CPF válido ✅'), findsNothing);
     });
   });
 }
