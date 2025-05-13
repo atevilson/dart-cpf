@@ -1,5 +1,8 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:validador_cpf/cpf_validate.dart';
 
 class CpfValidatorScreen extends StatefulWidget{
   const CpfValidatorScreen({super.key});
@@ -13,11 +16,14 @@ class _CpfValidatorScreenState extends State<CpfValidatorScreen> {
   late final FocusNode _focusNode = FocusNode();
   bool _isFocused = false;
   bool _isEnabled = false;
+  String? _validateCpf;
 
   // strings fixas
   final String _validadorCpf = "Validador de CPF";
   final String _validar = "validar";
   final String _insiraCpf = "Insira o cpf";
+  final String _cpfValido = "CPF válido";
+  final String _cpfInvalido = "CPF inválido";
 
   @override 
   void initState(){
@@ -28,6 +34,13 @@ class _CpfValidatorScreenState extends State<CpfValidatorScreen> {
       });
     });
     super.initState();
+  }
+
+  @override 
+  void dispose(){
+    super.dispose();
+    _controller.dispose();
+    _focusNode.dispose();
   }
 
   @override
@@ -48,19 +61,32 @@ class _CpfValidatorScreenState extends State<CpfValidatorScreen> {
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: TextFormField(
+              child: TextField(
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  _formatCpf()
+                ],
                 focusNode: _focusNode,
                 enabled: true,
                 controller: _controller,
                 keyboardType: TextInputType.number,
-                decoration: _getDecorationInput()
+                decoration: _getDecorationInput(),
               ),
             ),
-            ElevatedButton(onPressed: () => {}, 
+            ElevatedButton(
+              onPressed: () => _getValidatedCpf(), 
             style: ElevatedButton.styleFrom(
               backgroundColor: _isEnabled ? Colors.green : Colors.black54,
               foregroundColor: Colors.white
-            ), child: Text(_validar))
+            ), child: Text(_validar)),
+            if(_validateCpf != null) Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Text(_validateCpf ?? "",
+              style: TextStyle(
+                color: _validateCpf!.contains("✅") ? Colors.green : Colors.red,
+                fontSize: 25
+              ),),
+            )
           ],
         ),
       ),
@@ -89,7 +115,24 @@ class _CpfValidatorScreenState extends State<CpfValidatorScreen> {
           borderRadius: BorderRadius.circular(12.5),
           borderSide: BorderSide(color: Colors.red)),
       labelText: _insiraCpf,
-      labelStyle: TextStyle(color: _getLabelColor())
+      labelStyle: TextStyle(color: _getLabelColor()),
+      fillColor: Colors.green,
+      focusColor: Colors.green
    );
+  }
+
+   MaskTextInputFormatter _formatCpf(){
+    return MaskTextInputFormatter(
+      mask: "###.###.###-##",
+      filter: {"#": RegExp(r"[0-9]")}
+    );
+  }
+
+  void _getValidatedCpf() {
+    final cpf = _controller.text;
+    final isValid = CpfValidate().validate(cpf);
+    setState(() {
+      _validateCpf = isValid ? "$_cpfValido ✅" : "$_cpfInvalido ❌";
+    });
   }
 }
