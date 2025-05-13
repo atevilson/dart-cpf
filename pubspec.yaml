@@ -6,6 +6,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter:
     sdk: flutter
+  mask_text_input_formatter: ^2.9.0
   meta: ^1.16.0
   test: ^1.25.8
 dev_dependencies:
