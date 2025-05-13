@@ -1,0 +1,9 @@
+name: "validador_cpf"
+
+environment:
+  sdk: '^3.4.0'
+dependencies:
+  meta: ^1.16.0
+  test: ^1.25.8
+dev_dependencies:
+  coverage: ^1.11.1
