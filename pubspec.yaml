@@ -5,6 +5,7 @@ environment:
 dependencies:
   confetti: ^0.8.0
   cupertino_icons: ^1.0.8
+  device_preview: ^1.2.0
   flutter:
     sdk: flutter
   mask_text_input_formatter: ^2.9.0

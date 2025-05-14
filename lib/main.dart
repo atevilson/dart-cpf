@@ -1,9 +1,18 @@
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:validador_cpf/ui/cpf_validator_screen.dart';
 
 void main(){
-  runApp(MyApp());
+  bool isWeb = kIsWeb;
+  runApp(isWeb ? DevicePreview(
+          builder: (context) => const MyApp(),
+          enabled: true,
+          tools: const [
+            DeviceSection(),
+          ],
+        ) : const MyApp());
 }
 
 class MyApp extends StatelessWidget{
