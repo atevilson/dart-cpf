@@ -12,6 +12,14 @@ class MyApp extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        textSelectionTheme: TextSelectionThemeData(
+          selectionHandleColor: Colors.green,
+          cursorColor: Colors.green,
+          selectionColor: Colors.green
+        ),
+        useMaterial3: true
+      ),
       home: CpfValidatorScreen(),
     );
   }

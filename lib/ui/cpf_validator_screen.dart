@@ -1,4 +1,5 @@
 
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -14,6 +15,7 @@ class CpfValidatorScreen extends StatefulWidget{
 class _CpfValidatorScreenState extends State<CpfValidatorScreen> {
   late final TextEditingController _controller = TextEditingController();
   late final FocusNode _focusNode = FocusNode();
+  late ConfettiController _confettiController;
   bool _isFocused = false;
   bool _isEnabled = false;
   String? _validateCpf;
@@ -33,6 +35,9 @@ class _CpfValidatorScreenState extends State<CpfValidatorScreen> {
         _isEnabled = _focusNode.hasFocus;
       });
     });
+
+    _confettiController = ConfettiController(duration: const Duration(seconds: 2));
+
     super.initState();
   }
 
@@ -41,55 +46,74 @@ class _CpfValidatorScreenState extends State<CpfValidatorScreen> {
     super.dispose();
     _controller.dispose();
     _focusNode.dispose();
+    _confettiController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.only(top: 350.0),
-        child: Column(
-          children: [
-            Text(
-              _validadorCpf,
-              style: TextStyle(
-                fontSize: 20,
-                color: _isEnabled ? Colors.green : Colors.black54,
-                fontWeight: FontWeight.w500
+      body: Stack(alignment: Alignment.topCenter, children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 350.0),
+          child: Column(
+            children: [
+              Text(
+                _validadorCpf,
+                style: TextStyle(
+                    fontSize: 20,
+                    color: _isEnabled
+                        ? Colors.green
+                        : const Color.fromARGB(255, 53, 100, 0),
+                    fontWeight: FontWeight.w500),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextField(
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  _formatCpf()
-                ],
-                focusNode: _focusNode,
-                enabled: true,
-                controller: _controller,
-                keyboardType: TextInputType.number,
-                decoration: _getDecorationInput(),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: TextField(
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    _formatCpf()
+                  ],
+                  focusNode: _focusNode,
+                  enabled: true,
+                  controller: _controller,
+                  keyboardType: TextInputType.number,
+                  decoration: _getDecorationInput(),
+                  style: TextStyle(color: Colors.green),
+                ),
               ),
-            ),
-            ElevatedButton(
-              onPressed: () => _getValidatedCpf(), 
-            style: ElevatedButton.styleFrom(
-              backgroundColor: _isEnabled ? Colors.green : Colors.black54,
-              foregroundColor: Colors.white
-            ), child: Text(_validar)),
-            if(_validateCpf != null) Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Text(_validateCpf ?? "",
-              style: TextStyle(
-                color: _validateCpf!.contains("✅") ? Colors.green : Colors.red,
-                fontSize: 25
-              ),),
-            )
-          ],
+              ElevatedButton(
+                  onPressed: () => _getValidatedCpf(),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: _isEnabled
+                          ? Colors.green
+                          : const Color.fromARGB(255, 53, 100, 0),
+                      foregroundColor: Colors.white),
+                  child: Text(_validar)),
+              if (_validateCpf != null)
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Text(
+                    _validateCpf ?? "",
+                    style: TextStyle(
+                        color: _validateCpf!.contains("✅")
+                            ? Colors.green
+                            : Colors.red,
+                        fontSize: 23.0),
+                  ),
+                )
+            ],
+          ),
         ),
-      ),
+        ConfettiWidget(
+          confettiController: _confettiController,
+          blastDirectionality: BlastDirectionality.explosive,
+          shouldLoop: false,
+          emissionFrequency: 0.05,
+          numberOfParticles: 10,
+          maxBlastForce: 30,
+          gravity: 0.2,)
+      ]),
     );
   }
   
@@ -107,7 +131,7 @@ class _CpfValidatorScreenState extends State<CpfValidatorScreen> {
    return InputDecoration(
       enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12.5),
-          borderSide: BorderSide(color: Colors.black54)),
+          borderSide: BorderSide(color: const Color.fromARGB(255, 53, 100, 0))),
       focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12.5),
           borderSide: BorderSide(color: Colors.green)),
@@ -116,8 +140,6 @@ class _CpfValidatorScreenState extends State<CpfValidatorScreen> {
           borderSide: BorderSide(color: Colors.red)),
       labelText: _insiraCpf,
       labelStyle: TextStyle(color: _getLabelColor()),
-      fillColor: Colors.green,
-      focusColor: Colors.green
    );
   }
 
@@ -134,5 +156,6 @@ class _CpfValidatorScreenState extends State<CpfValidatorScreen> {
     setState(() {
       _validateCpf = isValid ? "$_cpfValido ✅" : "$_cpfInvalido ❌";
     });
+    if(isValid) _confettiController.play();
   }
 }
