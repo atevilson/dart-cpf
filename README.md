@@ -115,8 +115,6 @@ genhtml -o coverage_report lcov.info
 
 ---
 
-### Juntos, podemos construir software tão confiável quanto um relógio suíço! ⏱️💻
-
 ### Nesse README busquei abordar explicações técnicas com analogias, para tornar o código mais compreensível e ressaltar a cultura de testes. O que me diz? 😊
 
 ---
