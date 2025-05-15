@@ -107,6 +107,7 @@ class _CpfValidatorScreenState extends State<CpfValidatorScreen> {
             ),
           ),
           ConfettiWidget(
+            key: const Key("confetti"),
             confettiController: _confettiController,
             blastDirectionality: BlastDirectionality.explosive,
             shouldLoop: false,

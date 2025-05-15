@@ -1,5 +1,6 @@
 
 
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:validador_cpf/ui/cpf_validator_screen.dart';
@@ -24,6 +25,20 @@ void main() {
       expect(find.widgetWithText(ElevatedButton, 'validar'), findsOneWidget);
     });
 
+    testWidgets("Inclui um confetti widget e dispara ao validar o cpf", (tester) async{
+      await tester.pumpWidget(MaterialApp(home: CpfValidatorScreen()),
+      );
+
+      expect(find.byKey(const Key("confetti")), findsOneWidget);
+      expect(find.byType(ConfettiWidget), findsOneWidget);
+
+      await tester.enterText(find.byType(TextField), "12345678909");
+      await tester.tap(find.widgetWithText(ElevatedButton, "validar"));
+
+      await tester.pump();
+      await tester.pump(Duration(seconds: 2));
+    });
+
     testWidgets('mostra "CPF válido ✅" para um CPF válido', (WidgetTester tester) async {
       await tester.pumpWidget(
         MaterialApp(
@@ -33,7 +48,8 @@ void main() {
 
       await tester.enterText(find.byType(TextField), '12345678909');
       await tester.tap(find.widgetWithText(ElevatedButton, 'validar'));
-      await tester.pumpAndSettle();
+      await tester.pump();
+      await tester.pump(Duration(seconds: 2));
 
       expect(find.text('CPF válido ✅'), findsOneWidget);
       expect(find.text('CPF inválido ❌'), findsNothing);
