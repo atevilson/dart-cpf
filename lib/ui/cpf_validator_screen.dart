@@ -53,67 +53,69 @@ class _CpfValidatorScreenState extends State<CpfValidatorScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      body: Stack(alignment: Alignment.topCenter, children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 350.0),
-          child: Column(
-            children: [
-              Text(
-                _validadorCpf,
-                style: TextStyle(
-                    fontSize: 20,
-                    color: _isEnabled
-                        ? Colors.green
-                        : const Color.fromARGB(255, 53, 100, 0),
-                    fontWeight: FontWeight.w500),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: TextField(
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    _formatCpf()
-                  ],
-                  focusNode: _focusNode,
-                  enabled: true,
-                  controller: _controller,
-                  keyboardType: TextInputType.number,
-                  decoration: _getDecorationInput(),
-                  style: TextStyle(color: Colors.green),
-                ),
-              ),
-              ElevatedButton(
-                  onPressed: () => _getValidatedCpf(),
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: _isEnabled
+      body: SizedBox.expand(
+        child: Stack(alignment: Alignment.topCenter, children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 350.0),
+            child: Column(
+              children: [
+                Text(
+                  _validadorCpf,
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: _isEnabled
                           ? Colors.green
                           : const Color.fromARGB(255, 53, 100, 0),
-                      foregroundColor: Colors.white),
-                  child: Text(_validar)),
-              if (_validateCpf != null)
+                      fontWeight: FontWeight.w500),
+                ),
                 Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Text(
-                    _validateCpf ?? "",
-                    style: TextStyle(
-                        color: _validateCpf!.contains("✅")
-                            ? Colors.green
-                            : Colors.red,
-                        fontSize: 23.0),
+                  padding: const EdgeInsets.all(16.0),
+                  child: TextField(
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      _formatCpf()
+                    ],
+                    focusNode: _focusNode,
+                    enabled: true,
+                    controller: _controller,
+                    keyboardType: TextInputType.number,
+                    decoration: _getDecorationInput(),
+                    style: TextStyle(color: Colors.green),
                   ),
-                )
-            ],
+                ),
+                ElevatedButton(
+                    onPressed: () => _getValidatedCpf(),
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: _isEnabled
+                            ? Colors.green
+                            : const Color.fromARGB(255, 53, 100, 0),
+                        foregroundColor: Colors.white),
+                    child: Text(_validar)),
+                if (_validateCpf != null)
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Text(
+                      _validateCpf ?? "",
+                      style: TextStyle(
+                          color: _validateCpf!.contains("✅")
+                              ? Colors.green
+                              : Colors.red,
+                          fontSize: 23.0),
+                    ),
+                  )
+              ],
+            ),
           ),
-        ),
-        ConfettiWidget(
-          confettiController: _confettiController,
-          blastDirectionality: BlastDirectionality.explosive,
-          shouldLoop: false,
-          emissionFrequency: 0.05,
-          numberOfParticles: 10,
-          maxBlastForce: 30,
-          gravity: 0.2,)
-      ]),
+          ConfettiWidget(
+            confettiController: _confettiController,
+            blastDirectionality: BlastDirectionality.explosive,
+            shouldLoop: false,
+            emissionFrequency: 0.05,
+            numberOfParticles: 10,
+            maxBlastForce: 30,
+            gravity: 0.2,)
+        ]),
+      ),
     );
   }
   
